@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.swfinal.register.mapper.RegisterMapper">
+
+    <!-- 회원 중복 여부 조회 -->
+    <select id="selectMemberDuplicateCount" parameterType="java.util.HashMap">
+    <![CDATA[
+        SELECT
+            COUNT(*) AS duplCnt
+        FROM tb_users
+        WHERE USER_ID = #{userId}
+        ]]>
+	</select>
+
+    <!-- 회원가입 -->
+    <insert id="insertMember" parameterType="java.util.HashMap"> <![CDATA[
+        INSERT INTO tb_users
+            (USER_ID, USER_PW, USER_NM, USER_EMAIL, REG_DT, MOD_DT)
+        VALUES
+            (#{userId}, sha2(#{userPw}, 256), #{userName}, #{userEmail}, NOW(), NOW())
+        ]]>
+</insert>
+
+    <select id="selectMemberInfo" parameterType="java.util.HashMap"> <![CDATA[
+        SELECT
+            USER_SEQ, USER_ID, USER_PW, USER_NM, USER_EMAIL, REG_DT, MOD_DT
+        FROM tb_users
+        WHERE USER_ID = #{userId}
+        ]]>
+</select>
+
+    <delete id="deleteMember" parameterType="java.util.HashMap"> <![CDATA[
+        DELETE FROM tb_users
+               WHERE USER_SEQ=#{userSeq}
+        ]]>
+</delete>
+</mapper>
